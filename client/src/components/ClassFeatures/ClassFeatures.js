@@ -45,9 +45,7 @@ export default function ClassFeatures() {
                         <Switch/>
                     </List.Item>
                 }
-            >
-
-            </List>
+            />
         </>
     );
 }

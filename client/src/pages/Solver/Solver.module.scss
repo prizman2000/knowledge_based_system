@@ -1,0 +1,32 @@
+
+.ctn {
+  display: flex;
+  gap: 60px;
+
+  .left_col {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .input_select {
+    }
+
+    .submit {
+      height: 40px;
+    }
+  }
+
+  .right_col {
+    width: 500px;
+  }
+}
+
+.list {
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+
+  .list_item {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  }
+}
