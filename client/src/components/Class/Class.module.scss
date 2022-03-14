@@ -1,0 +1,23 @@
+
+.add_field {
+  margin-bottom: 20px;
+  height: 40px;
+
+  .input {
+    height: 100%;
+    width: 500px;
+  }
+
+  .button {
+    height: 100%;
+  }
+}
+
+.list {
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+
+  .list_item {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  }
+}
