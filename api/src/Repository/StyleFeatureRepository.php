@@ -2,30 +2,30 @@
 
 namespace App\Repository;
 
-use App\Entity\Connector;
+use App\Entity\StyleFeature;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Connector|null find($id, $lockMode = null, $lockVersion = null)
- * @method Connector|null findOneBy(array $criteria, array $orderBy = null)
- * @method Connector[]    findAll()
- * @method Connector[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method StyleFeature|null find($id, $lockMode = null, $lockVersion = null)
+ * @method StyleFeature|null findOneBy(array $criteria, array $orderBy = null)
+ * @method StyleFeature[]    findAll()
+ * @method StyleFeature[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ConnectorRepository extends ServiceEntityRepository
+class StyleFeatureRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Connector::class);
+        parent::__construct($registry, StyleFeature::class);
     }
 
     /**
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function add(Connector $entity, bool $flush = true): void
+    public function add(StyleFeature $entity, bool $flush = true): void
     {
         $this->_em->persist($entity);
         if ($flush) {
@@ -37,7 +37,7 @@ class ConnectorRepository extends ServiceEntityRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function remove(Connector $entity, bool $flush = true): void
+    public function remove(StyleFeature $entity, bool $flush = true): void
     {
         $this->_em->remove($entity);
         if ($flush) {
@@ -46,15 +46,15 @@ class ConnectorRepository extends ServiceEntityRepository
     }
 
     // /**
-    //  * @return Connector[] Returns an array of Connector objects
+    //  * @return StyleFeature[] Returns an array of StyleFeature objects
     //  */
     /*
     public function findByExampleField($value)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.exampleField = :val')
             ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
+            ->orderBy('s.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
@@ -63,10 +63,10 @@ class ConnectorRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Connector
+    public function findOneBySomeField($value): ?StyleFeature
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.exampleField = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()

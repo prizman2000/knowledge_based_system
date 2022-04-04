@@ -16,9 +16,6 @@ class Feature
     #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    #[ORM\Column(type: 'array', nullable: true)]
-    private $options = [];
-
     public function getId(): ?int
     {
         return $this->id;
@@ -32,18 +29,6 @@ class Feature
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getOptions(): ?array
-    {
-        return $this->options;
-    }
-
-    public function setOptions(?array $options): self
-    {
-        $this->options = $options;
 
         return $this;
     }

@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\ConnectorRepository;
+use App\Repository\StyleFeatureValueRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ConnectorRepository::class)]
-class Connector
+#[ORM\Entity(repositoryClass: StyleFeatureValueRepository::class)]
+class StyleFeatureValue
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -14,27 +14,27 @@ class Connector
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $style_name;
+    private $class_name;
 
     #[ORM\Column(type: 'string', length: 255)]
     private $feature_name;
 
-    #[ORM\Column(type: 'array', nullable: true)]
-    private $options = [];
+    #[ORM\Column(type: 'string', length: 255)]
+    private $feature_value;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getStyleName(): ?string
+    public function getClassName(): ?string
     {
-        return $this->style_name;
+        return $this->class_name;
     }
 
-    public function setStyleName(string $style_name): self
+    public function setClassName(string $class_name): self
     {
-        $this->style_name = $style_name;
+        $this->class_name = $class_name;
 
         return $this;
     }
@@ -51,14 +51,14 @@ class Connector
         return $this;
     }
 
-    public function getOptions(): ?array
+    public function getFeatureValue(): ?string
     {
-        return $this->options;
+        return $this->feature_value;
     }
 
-    public function setOptions(?array $options): self
+    public function setFeatureValue(string $feature_value): self
     {
-        $this->options = $options;
+        $this->feature_value = $feature_value;
 
         return $this;
     }
