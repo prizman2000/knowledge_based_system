@@ -20,20 +20,22 @@ class StyleFeatureController extends AppController
         $this->styleFeatureRepository = $styleFeatureRepository;
     }
 
-    #[Route('/style-feature', name: 'style-feature_get', methods: ['GET'])]
-    public function get_style_features(): Response
+    #[Route('/style-feature/{name}', name: 'style-feature_get', methods: ['GET'])]
+    public function get_style_features($name): Response
     {
         try {
             $values = $this->styleFeatureRepository->findAll();
             $values_array = [];
 
             foreach ($values as $value) {
-                $value_template = [
-                    'id' => $value->getId(),
-                    'feature_name' => $value->getFeatureName(),
-                    'class_name' => $value->getClassName()
-                ];
-                array_push($values_array, $value_template);
+                if ($value->getClassName() == $name) {
+                    $value_template = [
+                        'id' => $value->getId(),
+                        'feature_name' => $value->getFeatureName(),
+                        'class_name' => $value->getClassName()
+                    ];
+                    array_push($values_array, $value_template);
+                }
             }
 
             return $this->response($values_array);

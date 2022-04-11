@@ -55,6 +55,7 @@ export default function FeatureValues() {
             .then(res => res.json())
             .then(
                 (result) => {
+                    setIsLoaded(true);
                     setFeatureSelector(result[0].name)
                     setFeatures(result);
                 },
