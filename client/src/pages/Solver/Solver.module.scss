@@ -3,22 +3,38 @@
   display: flex;
   gap: 60px;
 
-  .left_col {
-    width: 300px;
+  .solver_entry {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
+    gap: 60px;
 
-    .input_select {
+    .left_col {
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      .input_select {
+      }
+
+      .submit {
+        height: 40px;
+      }
     }
 
-    .submit {
-      height: 40px;
+    .entered_data {
+      width: 500px;
     }
   }
 
+
+
   .right_col {
     width: 500px;
+
+    .submit_back {
+      margin-top: 30px;
+      width: 100px;
+    }
   }
 }
 
