@@ -16,7 +16,7 @@ export default function Solver() {
 
     const [selectedFeatures, setSelectedFeatures] = useState({});
 
-    const [possibleClasses, setPossibleClasses] = useState([]);
+    const [possibleClasses, setPossibleClasses] = useState(null);
 
     const handleChangeFeature = (e) => {
         setFeatureSelector(e);
@@ -51,8 +51,8 @@ export default function Solver() {
     };
 
     const handleSolve = () => {
-        setSolve(false);
-        fetch("http://localhost:8000/solve")
+        setSolve(true);
+        fetch("http://localhost:8000/solve", {method: 'post', body: JSON.stringify({data: selectedFeatures})})
             .then(res => res.json())
             .then(
                 (result) => {
@@ -152,20 +152,28 @@ export default function Solver() {
             :
                 <div className={s.right_col}>
                     <Tabs defaultActiveKey="1" onChange={callback}>
-                        <TabPane tab="Возможные классы" key="1">
-                            <List
-                                className={s.list}
-                                size={'large'}
-                                borded
-                                dataSource={possibleClasses}
-                                renderItem={item =>
-                                    <List.Item className={s.list_item}>
-                                        <List.Item.Meta
-                                            title={item.name}/>
-                                    </List.Item>
+                            <TabPane tab="Возможные классы" key="1">
+                                {possibleClasses && JSON.parse(possibleClasses).length !== 0 ?
+                                    <List
+                                        className={s.list}
+                                        size={'large'}
+                                        borded
+                                        dataSource={JSON.parse(possibleClasses)}
+                                        renderItem={item =>
+                                            <List.Item className={s.list_item}>
+                                                <List.Item.Meta
+                                                    title={item.name}/>
+                                            </List.Item>
+                                        }
+                                    />
+                                :
+                                    <Alert
+                                        message="Возможные классы не найдены"
+                                        description="Попробуйте задать другие входные значения признаков"
+                                        type="info"
+                                    />
                                 }
-                            />
-                        </TabPane>
+                            </TabPane>
                     </Tabs>
                     <Button onClick={() => setSolve(false)} className={s.submit_back} type="primary">Назад</Button>
                 </div>
