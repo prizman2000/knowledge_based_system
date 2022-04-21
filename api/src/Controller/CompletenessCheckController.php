@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Repository\StyleFeatureRepository;
 use App\Repository\StyleFeatureValueRepository;
-use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -24,15 +23,31 @@ class CompletenessCheckController extends AppController
     {
         try {
             $styleFeatures = $this->styleFeatureRepository->findAll();
-
+            $err = false;
+            $err_res = [];
 
             foreach ($styleFeatures as $item)
             {
                 $res = $this->styleFeatureValueRepository->findOneBy(["class_name" => $item->getClassName(), "feature_name" => $item->getFeatureName()]);
-                dd($res);
+                if(!$res)
+                {
+                    $err = true;
+                    array_push($err_res, ["class_name" => $item->getClassName(), "feature_name" => $item->getFeatureName()]);
+                }
             }
 
-            return $this->response();
+            if($err)
+            {
+
+                return $this->response($err_res);
+            } else {
+                $data = [
+                    'status' => Response::HTTP_OK,
+                    'success' => 'System is complete'
+                ];
+
+                return $this->response($data);
+            }
         } catch (\Exception $e) {
             $data = [
                 'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
