@@ -11,7 +11,7 @@ export default function Solver() {
     const [solve, setSolve] = useState();
 
     const [featureList, setFeatureList] = useState([]);
-    const [featureSelector, setFeatureSelector] = useState([]);
+    const [featureSelector, setFeatureSelector] = useState(null);
     const [featureValues, setFeatureValues] = useState([]);
 
     const [selectedFeatures, setSelectedFeatures] = useState({});
@@ -73,7 +73,9 @@ export default function Solver() {
             .then(res => res.json())
             .then(
                 (result) => {
-                    setFeatureSelector(result[0].name)
+                    if (!featureSelector) {
+                        setFeatureSelector(result[0].name);
+                    }
                     setFeatureList(result);
                 },
                 (error) => {
@@ -123,7 +125,7 @@ export default function Solver() {
                             }
                         />
                         }
-                        <Button disabled={Object.keys(selectedFeatures).length === 0} onClick={handleSolve} className={s.submit} type="primary">Результат</Button>
+                        <Button disabled={Object.keys(selectedFeatures).length === 0 || emptyRequest()} onClick={handleSolve} className={s.submit} type="primary">Результат</Button>
                     </div>
                     <div className={s.entered_data}>
                         {!emptyRequest() ?
