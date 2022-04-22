@@ -14,10 +14,8 @@ export default function Home() {
         <Page topMenu={topMenu} setTopMenu={setTopMenu} sideMenu={sideMenu} setSideMenu={setSideMenu}>
             {topMenu === '1' ?
                 <Solver/>
-            : topMenu === '2' ?
-                <EditMenu sideMenu={sideMenu}/>
             :
-                <CompleteCheck/>
+                <EditMenu sideMenu={sideMenu}/>
             }
         </Page>
     );

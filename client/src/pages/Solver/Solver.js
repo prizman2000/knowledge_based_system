@@ -18,6 +18,8 @@ export default function Solver() {
 
     const [possibleClasses, setPossibleClasses] = useState(null);
 
+    const [checkComplete, setCheckComplete] = useState(false);
+
     const handleChangeFeature = (e) => {
         setFeatureSelector(e);
     };
@@ -64,6 +66,19 @@ export default function Solver() {
             )
     };
 
+    const handleCheckComplete = () => {
+        fetch("http://localhost:8000/completeness-check")
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    setCheckComplete(result);
+                },
+                (error) => {
+                    console.log('Complete error: ' + error);
+                }
+            )
+    };
+
     const callback = (key) => {
         console.log(key);
     };
@@ -94,60 +109,100 @@ export default function Solver() {
             )
     }, []);
 
+    console.log(checkComplete);
+
     return (
         <div className={s.ctn}>
             {!solve ?
                 <div className={s.solver_entry}>
                     <div className={s.left_col}>
-                        {featureList.length !== 0 &&
-                        <Select className={s.input_select} defaultValue={featureList[0].name} onChange={(e) => handleChangeFeature(e)}>
-                            {featureList.map((item, i) =>
-                                <Option key={i} value={item.name}>{item.name}</Option>
-                            )}
-                        </Select>
+                        {(!checkComplete || checkComplete.length > 0) &&
+                            <Button onClick={handleCheckComplete} className={s.submit} type="primary">Проверить полноту</Button>
                         }
-                        {featureValues.length !== 0 && featureList.length !== 0 &&
-                        <List
-                            className={s.list}
-                            size={'large'}
-                            borded
-                            dataSource={featureValues}
-                            renderItem={item =>
-                                <>
-                                    {item.feature_name === featureSelector &&
+                        {checkComplete && checkComplete.status &&
+                             <>
+                                 {featureList.length !== 0 &&
+                                 <Select className={s.input_select} defaultValue={featureList[0].name} onChange={(e) => handleChangeFeature(e)}>
+                                     {featureList.map((item, i) =>
+                                         <Option key={i} value={item.name}>{item.name}</Option>
+                                     )}
+                                 </Select>
+                                 }
+                                 {featureValues.length !== 0 && featureList.length !== 0 &&
+                                 <List
+                                     className={s.list}
+                                     size={'large'}
+                                     borded
+                                     dataSource={featureValues}
+                                     renderItem={item =>
+                                         <>
+                                             {item.feature_name === featureSelector &&
+                                             <List.Item className={s.list_item}>
+                                                 <List.Item.Meta
+                                                     title={item.value}/>
+                                                 <Switch onClick={(e) => selectFeature(item.value, e)} checked={selectedFeatures[featureSelector] ? selectedFeatures[featureSelector].includes(item.value) : false}/>
+                                             </List.Item>
+                                             }
+                                         </>
+                                     }
+                                 />
+                                 }
+                                 <Button disabled={Object.keys(selectedFeatures).length === 0 || emptyRequest()} onClick={handleSolve} className={s.submit} type="primary">Результат</Button>
+                             </>
+                        }
+
+                    </div>
+
+                    <div className={s.entered_data}>
+                        {(!checkComplete || checkComplete.length > 0) &&
+                            <>
+                                <Alert
+                                    message={checkComplete.length > 0 ? "Ошибка проверка полноты" : "Необходима проверка полноты"}
+                                    description={checkComplete.length > 0 ? "Следующие признаки классов не заданы. Вырнитесь в редактор и задайте недостающие значения" : "Выполните проверку полноты базы знаний для дальнейшей работы с решателем"}
+                                    type={checkComplete.length > 0 ? "error" : "info"}
+                                />
+                            </>
+                        }
+                        {checkComplete.length > 0 &&
+                            <div className={s.bad_list}>
+                                <List
+                                    className={s.list}
+                                    size={'large'}
+                                    borded
+                                    dataSource={checkComplete}
+                                    renderItem={item =>
                                         <List.Item className={s.list_item}>
                                             <List.Item.Meta
-                                                title={item.value}/>
-                                            <Switch onClick={(e) => selectFeature(item.value, e)} checked={selectedFeatures[featureSelector] ? selectedFeatures[featureSelector].includes(item.value) : false}/>
+                                                title={item.class_name} description={item.feature_name}/>
                                         </List.Item>
                                     }
-                                </>
-                            }
-                        />
+                                />
+                            </div>
                         }
-                        <Button disabled={Object.keys(selectedFeatures).length === 0 || emptyRequest()} onClick={handleSolve} className={s.submit} type="primary">Результат</Button>
-                    </div>
-                    <div className={s.entered_data}>
-                        {!emptyRequest() ?
-                            <Collapse>
-                                {Object.keys(selectedFeatures).map((name, i) =>
-                                    <>
-                                        {selectedFeatures[name].length !== 0 &&
-                                            <Panel header={name} key={i}>
-                                                {selectedFeatures[name].map((item, i) =>
-                                                    <p key={i}>{item}</p>
-                                                )}
-                                            </Panel>
-                                        }
-                                    </>
-                                )}
-                            </Collapse>
-                        :
-                            <Alert
-                                message="Введите входные данные"
-                                description="Кнопка результата станет активна после того, как будут введены входные значения признаков"
-                                type="info"
-                            />
+                        {checkComplete && checkComplete.status &&
+                            <>
+                                {!emptyRequest() ?
+                                    <Collapse>
+                                        {Object.keys(selectedFeatures).map((name, i) =>
+                                            <>
+                                                {selectedFeatures[name].length !== 0 &&
+                                                <Panel header={name} key={i}>
+                                                    {selectedFeatures[name].map((item, i) =>
+                                                        <p key={i}>{item}</p>
+                                                    )}
+                                                </Panel>
+                                                }
+                                            </>
+                                        )}
+                                    </Collapse>
+                                    :
+                                    <Alert
+                                        message="Проверка полноты завершена успешно"
+                                        description="Кнопка результата станет активна после того, как будут введены входные значения признаков"
+                                        type="info"
+                                    />
+                                }
+                            </>
                         }
                     </div>
                 </div>

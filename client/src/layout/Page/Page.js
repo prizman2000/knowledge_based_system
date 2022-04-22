@@ -21,7 +21,6 @@ export default function Page(props) {
                 <Menu theme={'dark'} mode={'horizontal'} onClick={handleTopMenuClick} defaultSelectedKeys={[`${props.topMenu}`]}>
                     <Menu.Item key={'1'}>Решатель</Menu.Item>
                     <Menu.Item key={'2'}>Редактор базы знаний</Menu.Item>
-                    <Menu.Item key={'3'}>Проверка полноты</Menu.Item>
                 </Menu>
             </Header>
             <Content style={{ padding: '0 50px' }}>
